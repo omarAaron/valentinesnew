@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LEGO® Disney Stitch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose: #e91e63;
+      --rose-light: #f8bbd9;
+      --rose-dark: #c2185b;
+      --blush: #fce4ec;
+      --white: #fffef9;
+      --gold: #ffd54f;
+      --stitch-blue: #4fc3f7;
+      --stitch-sky: #b3e5fc;
+      --ohana: #5c6bc0;
+    }
+
+    html {
+      height: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100%;
+      font-family: 'Quicksand', sans-serif;
+      background: #ffffff;
+      color: #4a2c2a;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      padding-bottom: 3rem;
+    }
+
+    body.opener {
+      background: #ededed;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Opener – LEGO product page (realistic) */
+    .opener-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      background: #ededed;
+      overflow-y: auto;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .opener-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .lego-topbar {
+      background: #e3000b;
+      height: 4px;
+      width: 100%;
+    }
+
+    .lego-header {
+      width: 100%;
+      background: #fff;
+      padding: 0.75rem 1rem 0.875rem;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .lego-logo {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #e3000b;
+      line-height: 1;
+    }
+
+    .lego-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .lego-header-icon {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      cursor: default;
+      padding: 0;
+      color: #333;
+      opacity: 0.7;
+    }
+
+    .lego-header-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .lego-breadcrumb {
+      background: #fff;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      color: #666;
+      border-bottom: 1px solid #eee;
+    }
+
+    .lego-breadcrumb a {
+      color: #666;
+      text-decoration: none;
+    }
+
+    .lego-breadcrumb span { margin: 0 0.35rem; opacity: 0.6; }
+
+    .lego-main {
+      flex: 1;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .lego-product-card {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      animation: openerIn 0.5s ease-out;
+    }
+
+    @keyframes openerIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lego-product-image-wrap {
+      background: #fafafa;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid #eee;
+    }
+
+    .lego-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: #000;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    .lego-product-image {
+      max-width: 100%;
+      width: 240px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .lego-product-info {
+      padding: 1.25rem 1.25rem 1.5rem;
+    }
+
+    .lego-product-brand {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #e3000b;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+    }
+
+    .lego-product-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 0.35rem;
+      line-height: 1.3;
+    }
+
+    .lego-product-meta {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .lego-product-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .lego-detail-item {
+      font-size: 0.8rem;
+      color: #444;
+    }
+
+    .lego-detail-item strong { color: #000; margin-right: 0.25rem; }
+
+    .btn-continue {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      background: #e3000b;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .btn-continue:hover { background: #c40009; }
+    .btn-continue:active { transform: scale(0.99); }
+
+    .lego-footer {
+      padding: 1.25rem 1rem 1.5rem;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #999;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .lego-footer p { margin: 0.25rem 0; }
+
+    /* Floating hearts background */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 2.25rem;
+      animation: float linear infinite;
+      filter: drop-shadow(0 0 4px #ff69b4) drop-shadow(0 0 10px #ff1493) drop-shadow(0 0 18px rgba(255, 20, 147, 0.8)) drop-shadow(0 0 24px rgba(255, 105, 180, 0.6));
+    }
+
+    .heart::before { content: "♥"; }
+
+    .heart:nth-child(1) { left: 5%; animation-duration: 12s; animation-delay: 0s; color: #e91e63; }
+    .heart:nth-child(2) { left: 15%; animation-duration: 14s; animation-delay: 2s; color: #f50057; }
+    .heart:nth-child(3) { left: 25%; animation-duration: 10s; animation-delay: 1s; color: #d81b60; }
+    .heart:nth-child(4) { left: 35%; animation-duration: 16s; animation-delay: 3s; color: #ff4081; }
+    .heart:nth-child(5) { left: 45%; animation-duration: 11s; animation-delay: 0.5s; color: #e91e63; }
+    .heart:nth-child(6) { left: 55%; animation-duration: 13s; animation-delay: 2.5s; color: #c2185b; }
+    .heart:nth-child(7) { left: 65%; animation-duration: 15s; animation-delay: 1.5s; color: #f50057; }
+    .heart:nth-child(8) { left: 75%; animation-duration: 9s; animation-delay: 4s; color: #ff4081; }
+    .heart:nth-child(9) { left: 85%; animation-duration: 12s; animation-delay: 0.8s; color: #e91e63; }
+    .heart:nth-child(10) { left: 92%; animation-duration: 14s; animation-delay: 2.2s; color: #d81b60; }
+
+    .dragon {
+      position: absolute;
+      font-size: 2rem;
+      animation: float linear infinite;
+      filter: drop-shadow(0 0 6px rgba(255, 100, 100, 0.6)) drop-shadow(0 0 12px rgba(255, 150, 150, 0.4));
+    }
+
+    .dragons {
+      display: none;
+    }
+
+    .hearts-bg.dragons-visible .dragons {
+      display: block;
+    }
+
+    .dragons .dragon:nth-child(1) { left: 8%; animation-duration: 11s; animation-delay: 0.3s; }
+    .dragons .dragon:nth-child(2) { left: 22%; animation-duration: 14s; animation-delay: 1.5s; }
+    .dragons .dragon:nth-child(3) { left: 38%; animation-duration: 10s; animation-delay: 3s; }
+    .dragons .dragon:nth-child(4) { left: 52%; animation-duration: 13s; animation-delay: 0.8s; }
+    .dragons .dragon:nth-child(5) { left: 68%; animation-duration: 12s; animation-delay: 2.2s; }
+    .dragons .dragon:nth-child(6) { left: 82%; animation-duration: 15s; animation-delay: 1s; }
+    .dragons .dragon:nth-child(7) { left: 12%; animation-duration: 9s; animation-delay: 4s; }
+    .dragons .dragon:nth-child(8) { left: 88%; animation-duration: 11s; animation-delay: 2.5s; }
+
+    @keyframes float {
+      0% {
+        transform: translateY(-20vh) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      8% { opacity: 0.65; }
+      92% { opacity: 0.5; }
+      100% {
+        transform: translateY(100vh) rotate(360deg) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* Main content card */
+    .card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 254, 249, 0.92);
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(233, 30, 99, 0.15), 0 2px 12px rgba(0,0,0,0.06);
+      text-align: center;
+      animation: cardIn 0.8s ease-out;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .card-header {
+      margin-bottom: 1rem;
+    }
+
+    .card-header .hearts-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .name {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.5rem, 12vw, 3.5rem);
+      color: var(--rose-dark);
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(233, 30, 99, 0.2);
+    }
+
+    .message {
+      font-size: clamp(1rem, 4vw, 1.15rem);
+      line-height: 1.6;
+      color: #5c3d3b;
+      margin: 1rem 0 1.5rem;
+      font-weight: 500;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      min-height: 56px;
+    }
+
+    .btn {
+      min-width: 120px;
+      min-height: 52px;
+      padding: 14px 28px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-yes {
+      background: linear-gradient(145deg, var(--rose) 0%, var(--rose-dark) 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(233, 30, 99, 0.4);
+    }
+
+    .btn-yes:hover {
+      box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
+    }
+
+    .btn-no {
+      background: linear-gradient(145deg, #f5f5f5 0%, #e8e8e8 100%);
+      color: #888;
+      position: relative;
+    }
+
+    .btn-no.runaway {
+      transition: transform 0.3s ease-out;
+    }
+
+    /* Success state */
+    .success {
+      display: none;
+      animation: successIn 0.6s ease-out;
+    }
+
+    .success.visible {
+      display: block;
+    }
+
+    .proposal-content.hidden {
+      display: none;
+    }
+
+    .are-you-sure {
+      display: none;
+      text-align: center;
+      animation: successIn 0.4s ease-out;
+    }
+
+    .are-you-sure.visible {
+      display: block;
+    }
+
+    .are-you-sure .are-you-sure-emoji {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .are-you-sure .are-you-sure-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #5c3d3b;
+      margin-bottom: 0.5rem;
+    }
+
+    .are-you-sure .are-you-sure-text {
+      font-size: 1rem;
+      color: #6b4d4b;
+      margin-bottom: 1.25rem;
+    }
+
+    .btn-take-me-back {
+      min-height: 52px;
+      padding: 14px 28px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(145deg, var(--rose) 0%, var(--rose-dark) 100%);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(233, 30, 99, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .btn-take-me-back:hover { box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5); }
+    .btn-take-me-back:active { transform: scale(0.97); }
+
+    @keyframes successIn {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Rose confetti burst – only when she clicks Yes */
+    .rose-confetti {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .rose-confetti-piece {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-size: 1.5rem;
+      animation: roseBurst ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes roseBurst {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+      }
+      15% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(calc(-50% + var(--burst-x, 0px)), calc(-50% + var(--burst-y, 0px))) scale(1);
+        opacity: 0;
+      }
+    }
+
+    .success .big-heart {
+      font-size: 4rem;
+      margin: 1rem 0;
+      animation: heartBeat 0.8s ease infinite;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.15); }
+    }
+
+    .success .success-photo-wrap {
+      margin: 1rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(233, 30, 99, 0.2);
+      max-width: 280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .success .success-photo {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: middle;
+    }
+
+    .success .success-message {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(1.8rem, 8vw, 2.5rem);
+      color: var(--rose-dark);
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+    }
+
+    .success .sub-message {
+      font-size: 1rem;
+      color: #6b4d4b;
+    }
+
+    .btn-select-gift {
+      display: inline-block;
+      min-height: 48px;
+      padding: 12px 24px;
+      margin-top: 1rem;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(145deg, var(--rose) 0%, var(--rose-dark) 100%);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(233, 30, 99, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .btn-select-gift:hover { box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5); }
+    .btn-select-gift:active { transform: scale(0.97); }
+
+    .gift-spinner-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.6);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .gift-spinner-overlay.visible {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gift-spinner-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 1.5rem;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    }
+
+    .gift-spinner-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .gift-wheel-wrap {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      margin: 0 auto 1rem;
+    }
+
+    .gift-wheel-pointer {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 24px solid var(--rose);
+      z-index: 2;
+    }
+
+    .gift-wheel {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      border: 4px solid var(--rose);
+      position: relative;
+      overflow: hidden;
+      transition: transform 4.2s cubic-bezier(0.15, 0.5, 0.2, 1);
+    }
+
+    .gift-wheel-segment {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      left: 50%;
+      top: 0;
+      transform-origin: 0% 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 8px;
+    }
+
+    .gift-wheel-segment span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #333;
+      transform: translateX(20%);
+      max-width: 52px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .gift-wheel-segment:nth-child(1) { transform: rotate(0deg); background: #ffcdd2; }
+    .gift-wheel-segment:nth-child(2) { transform: rotate(51.43deg); background: #f8bbd9; }
+    .gift-wheel-segment:nth-child(3) { transform: rotate(102.86deg); background: #e1bee7; }
+    .gift-wheel-segment:nth-child(4) { transform: rotate(154.29deg); background: #c5cae9; }
+    .gift-wheel-segment:nth-child(5) { transform: rotate(205.72deg); background: #b2dfdb; }
+    .gift-wheel-segment:nth-child(6) { transform: rotate(257.15deg); background: #d7ccc8; }
+    .gift-wheel-segment:nth-child(7) { transform: rotate(308.58deg); background: #ffccbc; }
+
+    .gift-result {
+      display: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #c2185b;
+      margin-top: 0.5rem;
+      min-height: 2.5em;
+    }
+
+    .gift-result.visible {
+      display: block;
+    }
+
+    .gift-spinner-close {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--rose-dark);
+      background: transparent;
+      border: 2px solid var(--rose);
+      border-radius: 999px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body class="opener">
+  <div class="opener-screen" id="openerScreen">
+    <div class="lego-topbar"></div>
+    <header class="lego-header">
+      <span class="lego-logo" aria-label="LEGO">LEGO®</span>
+      <div class="lego-header-actions">
+        <button type="button" class="lego-header-icon" aria-label="Search" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button type="button" class="lego-header-icon" aria-label="Account" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M4 20v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg>
+        </button>
+        <button type="button" class="lego-header-icon" aria-label="Cart" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </button>
+      </div>
+    </header>
+    <nav class="lego-breadcrumb">
+      <a href="#">Home</a><span>/</span><a href="#">Disney</a><span>/</span><a href="#">Lilo &amp; Stitch</a>
+    </nav>
+    <main class="lego-main">
+      <article class="lego-product-card">
+        <div class="lego-product-image-wrap">
+          <span class="lego-badge">Disney</span>
+          <img src="stitch-lego.png" alt="LEGO Disney Stitch figure in Hawaiian shirt with ice cream" class="lego-product-image" width="240" height="240">
+        </div>
+        <div class="lego-product-info">
+          <p class="lego-product-brand">LEGO Disney</p>
+          <h1 class="lego-product-title">Stitch</h1>
+          <p class="lego-product-meta">Lilo &amp; Stitch · Building set</p>
+          <div class="lego-product-details">
+            <span class="lego-detail-item"><strong>Item:</strong> 43222</span>
+            <span class="lego-detail-item"><strong>Pieces:</strong> 1,167</span>
+            <span class="lego-detail-item"><strong>Age:</strong> 8+</span>
+          </div>
+          <button type="button" class="btn-continue" id="btnContinue" aria-label="Continue to product details">View full details</button>
+        </div>
+      </article>
+    </main>
+    <footer class="lego-footer">
+      <p>LEGO, the LEGO logo and the Minifigure are trademarks of the LEGO Group.</p>
+      <p>© 2025 The LEGO Group. Disney © Disney Enterprises, Inc.</p>
+    </footer>
+  </div>
+
+  <div class="rose-confetti" id="roseConfetti" aria-hidden="true"></div>
+
+  <div class="hearts-bg" id="heartsBg" aria-hidden="true">
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <span class="heart"></span>
+    <div class="dragons">
+      <span class="dragon" aria-hidden="true">🐉</span>
+      <span class="dragon" aria-hidden="true">🐲</span>
+      <span class="dragon" aria-hidden="true">🐉</span>
+      <span class="dragon" aria-hidden="true">🐲</span>
+      <span class="dragon" aria-hidden="true">🐉</span>
+      <span class="dragon" aria-hidden="true">🐲</span>
+      <span class="dragon" aria-hidden="true">🐉</span>
+      <span class="dragon" aria-hidden="true">🐲</span>
+    </div>
+  </div>
+
+  <main class="card" id="mainCard" aria-hidden="true">
+    <div class="proposal-content" id="proposal">
+      <div class="card-header">
+        <div class="hearts-row">♥ ♥ ♥</div>
+        <h1 class="name">Timika</h1>
+      </div>
+      <p class="message">
+        Will you be my Valentine?
+      </p>
+      <div class="buttons">
+        <button type="button" class="btn btn-yes" id="btnYes" aria-label="Say yes">Yes!</button>
+        <button type="button" class="btn btn-no" id="btnNo" aria-label="Say no">No</button>
+      </div>
+    </div>
+
+    <div class="are-you-sure" id="areYouSure">
+      <div class="are-you-sure-emoji" aria-hidden="true">😢</div>
+      <p class="are-you-sure-title">Are you sure?</p>
+      <p class="are-you-sure-text">Think about it... then try again.</p>
+      <button type="button" class="btn btn-take-me-back" id="btnTakeMeBack" aria-label="Take me back">Take me back</button>
+    </div>
+
+    <div class="success" id="success">
+      <div class="big-heart" aria-hidden="true">♥</div>
+      <p class="success-message">Yes! I'm so happy, Timika!</p>
+      <div class="success-photo-wrap">
+        <img src="us.png" alt="Us" class="success-photo" width="280" height="auto">
+      </div>
+      <p class="sub-message">You have made my day I love you ♥</p>
+      <button type="button" class="btn-select-gift" id="btnSelectGift" aria-label="Select a gift">Select gift</button>
+    </div>
+  </main>
+
+  <div class="gift-spinner-overlay" id="giftSpinnerOverlay">
+    <div class="gift-spinner-box">
+      <p class="gift-spinner-title">Spin for your gift!</p>
+      <div class="gift-wheel-wrap">
+        <div class="gift-wheel-pointer" aria-hidden="true"></div>
+        <div class="gift-wheel" id="giftWheel">
+          <div class="gift-wheel-segment"><span>Chocolates</span></div>
+          <div class="gift-wheel-segment"><span>A gown</span></div>
+          <div class="gift-wheel-segment"><span>Ted Baker bag</span></div>
+          <div class="gift-wheel-segment"><span>Make up</span></div>
+          <div class="gift-wheel-segment"><span>Nothing</span></div>
+          <div class="gift-wheel-segment"><span>Shoes</span></div>
+          <div class="gift-wheel-segment"><span>Clothes</span></div>
+        </div>
+      </div>
+      <p class="gift-result" id="giftResult"></p>
+      <button type="button" class="gift-spinner-close" id="giftSpinnerClose">Close</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var openerScreen = document.getElementById('openerScreen');
+      var btnContinue = document.getElementById('btnContinue');
+      var mainCard = document.getElementById('mainCard');
+      var btnYes = document.getElementById('btnYes');
+      var btnNo = document.getElementById('btnNo');
+      var btnTakeMeBack = document.getElementById('btnTakeMeBack');
+      var proposal = document.getElementById('proposal');
+      var areYouSure = document.getElementById('areYouSure');
+      var success = document.getElementById('success');
+
+      function revealProposal() {
+        document.body.classList.remove('opener');
+        openerScreen.classList.add('hidden');
+        mainCard.setAttribute('aria-hidden', 'false');
+        mainCard.style.animation = 'none';
+        mainCard.offsetHeight;
+        mainCard.style.animation = 'cardIn 0.8s ease-out';
+      }
+
+      btnContinue.addEventListener('click', revealProposal);
+
+      function showSuccess() {
+        proposal.classList.add('hidden');
+        areYouSure.classList.remove('visible');
+        success.classList.add('visible');
+        document.getElementById('heartsBg').classList.add('dragons-visible');
+      }
+
+      function fireRoseConfetti() {
+        var container = document.getElementById('roseConfetti');
+        container.innerHTML = '';
+        var count = 55;
+        var durationMin = 2.2;
+        var durationMax = 3.2;
+        var spread = 280;
+        for (var i = 0; i < count; i++) {
+          var angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+          var dist = spread * (0.6 + Math.random() * 0.5);
+          var x = Math.cos(angle) * dist;
+          var y = Math.sin(angle) * dist;
+          var piece = document.createElement('span');
+          piece.className = 'rose-confetti-piece';
+          piece.textContent = '🌹';
+          piece.style.setProperty('--burst-x', x + 'px');
+          piece.style.setProperty('--burst-y', y + 'px');
+          piece.style.animationDuration = (durationMin + Math.random() * (durationMax - durationMin)) + 's';
+          piece.style.animationDelay = (Math.random() * 0.25) + 's';
+          container.appendChild(piece);
+        }
+        container.style.display = 'block';
+        container.style.opacity = '1';
+        setTimeout(function () {
+          container.style.opacity = '0';
+          container.style.transition = 'opacity 0.5s ease';
+          setTimeout(function () {
+            container.style.display = 'none';
+            container.innerHTML = '';
+            container.style.transition = '';
+          }, 500);
+        }, 3500);
+      }
+
+      btnYes.addEventListener('click', function () {
+        fireRoseConfetti();
+        showSuccess();
+      });
+
+      function runAway(btn) {
+        btn.classList.add('runaway');
+        var rect = btn.getBoundingClientRect();
+        var maxX = window.innerWidth - rect.width - 24;
+        var maxY = window.innerHeight - rect.height - 24;
+        var x = Math.random() * maxX * 0.8 - maxX * 0.4;
+        var y = Math.random() * maxY * 0.6 - maxY * 0.3;
+        btn.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+        setTimeout(function () {
+          btn.classList.remove('runaway');
+          btn.style.transform = '';
+        }, 300);
+      }
+
+      var hasSeenAreYouSure = false;
+
+      function showAreYouSure() {
+        proposal.classList.add('hidden');
+        areYouSure.classList.add('visible');
+        hasSeenAreYouSure = true;
+      }
+
+      function backToProposal() {
+        areYouSure.classList.remove('visible');
+        proposal.classList.remove('hidden');
+      }
+
+      btnTakeMeBack.addEventListener('click', backToProposal);
+
+      function onNoAttempt() {
+        runAway(btnNo);
+        if (!hasSeenAreYouSure) {
+          showAreYouSure();
+        }
+      }
+
+      btnNo.addEventListener('click', function (e) {
+        e.preventDefault();
+        onNoAttempt();
+      });
+
+      btnNo.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 1) {
+          onNoAttempt();
+        }
+      }, { passive: false });
+
+      btnNo.addEventListener('mouseenter', function () {
+        if (hasSeenAreYouSure) {
+          runAway(btnNo);
+        }
+      });
+
+      var giftWheel = document.getElementById('giftWheel');
+      var giftSpinnerOverlay = document.getElementById('giftSpinnerOverlay');
+      var giftResult = document.getElementById('giftResult');
+      var btnSelectGift = document.getElementById('btnSelectGift');
+      var giftSpinnerClose = document.getElementById('giftSpinnerClose');
+
+      function openGiftSpinner() {
+        giftResult.classList.remove('visible');
+        giftResult.textContent = '';
+        giftWheel.style.transition = 'none';
+        giftWheel.style.transform = 'rotate(0deg)';
+        giftSpinnerOverlay.classList.add('visible');
+        giftSpinnerOverlay.style.display = 'flex';
+        giftWheel.offsetHeight;
+        giftWheel.style.transition = 'transform 4.2s cubic-bezier(0.15, 0.5, 0.2, 1)';
+        giftWheel.style.transform = 'rotate(2314deg)';
+        setTimeout(function () {
+          giftResult.textContent = 'Unfortunately you have selected nothing.';
+          giftResult.classList.add('visible');
+        }, 4200);
+      }
+
+      function closeGiftSpinner() {
+        giftSpinnerOverlay.classList.remove('visible');
+        giftSpinnerOverlay.style.display = 'none';
+      }
+
+      btnSelectGift.addEventListener('click', openGiftSpinner);
+      giftSpinnerClose.addEventListener('click', closeGiftSpinner);
+    })();
+  </script>
+</body>
+</html>
